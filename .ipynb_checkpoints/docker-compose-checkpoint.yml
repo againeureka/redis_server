@@ -1,0 +1,41 @@
+version: '3.4'
+
+# KETI, 2023
+services:
+    # (참고) redis 기초 명령어 : https://tgyun615.com/192
+    redis:
+        image: redislabs/redisai
+        container_name: redisai
+        ports:
+            - 6379:6379
+        volumes:
+            - ~/.evc/redis/data:/data # 홈 위치에 .evc 폴더를 만듭니다. 
+        restart: always
+        networks:
+            - evc_network
+        env_file:
+            - .env
+        networks:
+            - redis_network
+
+    # (참고) https://hub.docker.com/r/rediscommander/redis-commander
+    redis-commander:
+        container_name: redis-commander
+        hostname: redis-commander
+        image: rediscommander/redis-commander:latest
+        restart: always
+        environment:
+            - REDIS_HOSTS=local:redis:6379,evc:evc.re.kr:20079
+            - REDIS_PASSWORD='$${REDIS_PASSWORD}'
+            - HTTP_USER=evc
+            - HTTP_PASSWORD=evc
+        ports:
+            - 8091:8081
+        networks:
+            - redis_network
+        env_file:
+            - .env
+
+networks:
+    redis_network:
+        driver: bridge
