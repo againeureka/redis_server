@@ -1,2 +1,6 @@
 # redis_server
-redis_server docker compose project
+
+- J. Park @ 2023
+- This is a docker compose project for __redis_server__
+- Be sure to __change your password for Redis__.
+  
